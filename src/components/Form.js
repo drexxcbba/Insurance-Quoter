@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import { getDifferenceYear, calculateBrand, getPlan } from '../helper';
 
 const Field = styled.div`
     display: flex;
@@ -40,12 +41,59 @@ const Button = styled.button`
     }
 `;
 
+const Error = styled.div`
+    background-color: red;
+    color: white;
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+`;
+
 const Form = () => {
+
+    const [data, setData] = useState({
+        brand: '',
+        year: '',
+        plan: ''
+    });
+
+    const [error, setError] = useState(false);
+
+    const { brand, year, plan } = data;
+
+    const getData = e => {
+        setData({
+            ...data,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    const getInsurance = e => {
+        e.preventDefault();
+        if(brand.trim() === '' || year.trim() === '' || plan.trim() === ''){
+            setError(true);
+            return;
+        }
+        setError(false);
+        const diff = getDifferenceYear(year);
+        let res = 2000;
+        res -= ((diff * 3) * res) / 100;
+        res = calculateBrand(brand) * res;
+        let increment = getPlan(plan);
+        res = parseFloat(increment * res).toFixed(2);
+        console.log(res);
+    }
+
     return ( 
-        <form>
+        <form onSubmit={getInsurance}>
+            {error ? <Error>Todos los campos son obligatorios</Error>: null}
             <Field>
                 <Label>Marca</Label>
-                <Select>
+                <Select
+                 name="brand"
+                 value={brand}
+                 onChange={getData}
+                 >
                     <option value="">-- Seleccione --</option>
                     <option value="americano">Americano</option>
                     <option value="europeo">Europeo</option>
@@ -54,7 +102,11 @@ const Form = () => {
             </Field >
             <Field >
                 <Label>Año</Label>
-                <Select>
+                <Select
+                 name="year"
+                 value={year}
+                 onChange={getData}
+                 >
                     <option value="">-- Seleccione --</option>
                     <option value="2021">2021</option>
                     <option value="2020">2020</option>
@@ -74,14 +126,18 @@ const Form = () => {
                  type="radio"
                  name="plan"
                  value="basico"
+                 checked={plan === "basico"}
+                 onChange={getData}
                 /> Basico
                 <InputRadio
                  type="radio"
                  name="plan"
                  value="completo"
+                 checked={plan === "completo"}
+                 onChange={getData}
                 /> Completo
             </Field >
-            <Button type="button">Cotizar</Button>
+            <Button type="submit">Cotizar</Button>
         </form>
      );
 }

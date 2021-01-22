@@ -49,7 +49,7 @@ const Error = styled.div`
     text-align: center;
 `;
 
-const Form = () => {
+const Form = ({setResumee, setLoading}) => {
 
     const [data, setData] = useState({
         brand: '',
@@ -81,7 +81,14 @@ const Form = () => {
         res = calculateBrand(brand) * res;
         let increment = getPlan(plan);
         res = parseFloat(increment * res).toFixed(2);
-        console.log(res);
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            setResumee({
+                quote: res,
+                data
+            });
+        }, 3000);
     }
 
     return ( 

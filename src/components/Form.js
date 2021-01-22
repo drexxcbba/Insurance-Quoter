@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { getDifferenceYear, calculateBrand, getPlan } from '../helper';
+import PropTypes from 'prop-types';
 
 const Field = styled.div`
     display: flex;
@@ -85,7 +86,7 @@ const Form = ({setResumee, setLoading}) => {
         setTimeout(() => {
             setLoading(false);
             setResumee({
-                quote: res,
+                quote: Number(res),
                 data
             });
         }, 3000);
@@ -147,6 +148,11 @@ const Form = ({setResumee, setLoading}) => {
             <Button type="submit">Cotizar</Button>
         </form>
      );
+}
+
+Form.propTypes = {
+    setResumee: PropTypes.func.isRequired,
+    setLoading: PropTypes.func.isRequired
 }
  
 export default Form;

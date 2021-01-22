@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { firstMayus } from '../helper'
+import { firstMayus } from '../helper';
+import PropTypes from 'prop-types';
 
 const ContainerResumee = styled.div`
     padding: 1rem;
@@ -27,5 +28,9 @@ const Resumee = ({data}) => {
         </ContainerResumee>
      );
 }
- 
+
+Resumee.propTypes = {
+    data: PropTypes.object.isRequired
+}
+
 export default Resumee;
